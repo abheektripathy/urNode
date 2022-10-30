@@ -7,7 +7,7 @@ services:
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     env_file:
-      - ./.env
+      - Docker/.env_template
 
   # Redis - result backend
   redis:
@@ -20,7 +20,7 @@ services:
       - "8000"
     build:
       context: ./
-      dockerfile: ./Dockerfile
+      dockerfile: Docker/Dockerfile
     depends_on:
       - postgres
     ports:
@@ -28,7 +28,7 @@ services:
     volumes:
       - ./urNode-backend:/app
     env_file:
-      - ./.env
+      - Docker/.env_template
     links:
       - celery
       - rabbit
@@ -38,7 +38,7 @@ services:
   celery:
     build:
       context: ./
-      dockerfile: ./Dockerfile.celery
+      dockerfile: Docker/Dockerfile.celery
     container_name: celery_server
     command: celery -A Uturn worker --loglevel=info --without-gossip --without-mingle --without-heartbeat -Ofair --pool=solo
     volumes:
